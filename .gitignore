@@ -1,3 +1,4 @@
 __pycache__/*.pyc
 controllers/__pycache__/*.pyc
 models/__pycache__/*.pyc
+utils/__pycache__/*.pyc
