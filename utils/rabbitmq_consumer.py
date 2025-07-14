@@ -1,6 +1,10 @@
 import threading
 import pika
 import time
+import ssl
+import odoo
+from odoo import api, SUPERUSER_ID
+from odoo.tools import config
 
 # Globals
 _connection = None
@@ -9,11 +13,11 @@ _consumer_thread = None
 _stop_flag = False
 
 # Configuration - adjust host, port, credentials as needed
-RABBITMQ_HOST = "localhost"     # Change to remote IP or hostname later
-RABBITMQ_PORT = 5672            # Default AMQP port
-RABBITMQ_USER = "guest"         # Default user (update in production)
-RABBITMQ_PASSWORD = "guest"     # Default password
-QUEUE_NAME = "attendance_queue" # Your queue name
+RABBITMQ_HOST = "porpoise.rmq.cloudamqp.com"
+RABBITMQ_PORT = 5671  # TLS port
+RABBITMQ_USER = "vdejelkw"
+RABBITMQ_PASSWORD = "9b1hkSWYIGOydNJsxMmYQqQZ1r9MCV0P"
+QUEUE_NAME = "attendance_queue"
 
 
 def start_rabbitmq_consumer():
@@ -38,10 +42,14 @@ def _run_consumer():
     global _connection, _channel
     try:
         credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
+        context = ssl.create_default_context()  # TLS/SSL context
+
         parameters = pika.ConnectionParameters(
             host=RABBITMQ_HOST,
             port=RABBITMQ_PORT,
+            virtual_host=RABBITMQ_USER,  # Use user as vhost for CloudAMQP
             credentials=credentials,
+            ssl_options=pika.SSLOptions(context),
             heartbeat=30,
             blocked_connection_timeout=300
         )
@@ -58,6 +66,7 @@ def _run_consumer():
                 break
             if body:
                 print("Received:", body.decode())
+                # _save_sync_log(body.decode())
                 _channel.basic_ack(method_frame.delivery_tag)
 
         if _channel.is_open:
@@ -67,3 +76,15 @@ def _run_consumer():
 
     except Exception as e:
         print("RabbitMQ consumer exception:", e)
+
+# def _save_sync_log(data):
+#     """Store message in attendance.sync.log inside Odoo."""
+#     db_name = config.get('db_name')
+#     registry = odoo.registry(db_name)  # ⚠ Replace with your actual DB name
+#     with registry.cursor() as cr:
+#         env = api.Environment(cr, SUPERUSER_ID, {})
+#         env['attendance.sync.log'].create({
+#             'queue_name': QUEUE_NAME,
+#             'data': data,
+#             'is_synced': False,
+#         })
