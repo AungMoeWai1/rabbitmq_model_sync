@@ -7,12 +7,18 @@ ATTENDANCE_STATUS = [
     ('fail', 'Fail'),
 ]
 
+ATTENDANCE_TYPE=[
+    ('check_in','Check In'),
+    ('check_out','Check Out'),
+]
+
 class AttendanceSyncLog(models.Model):
     _name = "attendance.sync.log"
     _rec_name = 'employee_id'
 
     employee_id=fields.Many2one(comodel_name='hr.employee',string="Employee ID")
     attendance_id = fields.Many2one(comodel_name='hr.attendance',string="Attendance ID")
+    type=fields.Selection(ATTENDANCE_TYPE, string="Attendance Type", default='check_in', help="Type of attendance action")
     queue_name = fields.Char(string="Queue Name")
     data = fields.Json(
         string="Data",
@@ -21,25 +27,32 @@ class AttendanceSyncLog(models.Model):
 
     def action_retry_sync(self):
         """Retry the sync operation for this log entry."""
-        self.state = 'success'
+        if self.type=='check_in':
+            self._action_check_in()
+        else:
+            self._action_check_out()
 
-    def action_check_in(self):
+    def _action_check_in(self):
         try:
-            attendance = self.env['hr.attendance'].create({
+            self.env['hr.attendance'].create({
                 'employee_id': self.employee_id.id,
                 'check_in': fields.Datetime.now()
             })
             self.state = "success"
         except Exception as e:
+            self.state = "fail"
             print("Error at check in :",e)
 
-    def action_check_out(self):
-        attendance = self.env['hr.attendance'].search([
+    def _action_check_out(self):
+        try:
+            attendance = self.env['hr.attendance'].search([
             ('employee_id', '=', self.employee_id.id),
             ('check_out', '=', False)
-        ], limit=1)
-        if attendance:
-            attendance.write({'check_out': fields.Datetime.now()})
-        print("Checkout success")
-        self.state="fail"
-        return True
+            ], limit=1)
+            if attendance:
+                attendance.write({'check_out': fields.Datetime.now()})
+                self.state = "success"
+        except Exception as e:
+            self.state = "fail"
+            print("Error at check out :",e)
+            

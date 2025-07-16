@@ -22,6 +22,7 @@
                 <field name="attendance_id" optional="show"/>
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
+                <field name="type" optional="show"/>
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'success'"
                        decoration-info="state == 'new'" decoration-danger="state == 'fail'"/>
             </list>
@@ -34,9 +35,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button string="Check In" name="action_check_in" invisible="state == 'success'" type="object"
-                            class="oe_highlight"/>
-                    <button string="Check Out" name="action_check_out" invisible="state != 'success'" type="object"
+                    <button string="Retry" name="action_retry_sync" invisible="state == 'success'" type="object"
                             class="oe_highlight"/>
                     <field name="state" widget="statusbar"/>
                 </header>
@@ -47,6 +46,7 @@
                             <field name="attendance_id"/>
                         </group>
                         <group>
+                            <field name="type"/>
                             <field name="queue_name" readonly="True"/>
                             <field name="data"/>
                         </group>
