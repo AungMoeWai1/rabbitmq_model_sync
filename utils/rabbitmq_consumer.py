@@ -3,6 +3,8 @@ import pika
 import time
 import ssl
 import odoo
+import os
+from . import credential_reader as cr
 from odoo import api, SUPERUSER_ID
 from odoo.tools import config
 
@@ -13,11 +15,22 @@ _consumer_thread = None
 _stop_flag = False
 
 # Configuration - adjust host, port, credentials as needed
-RABBITMQ_HOST = "porpoise.rmq.cloudamqp.com"
-RABBITMQ_PORT = 5671  # TLS port
-RABBITMQ_USER = "vdejelkw"
-RABBITMQ_PASSWORD = "9b1hkSWYIGOydNJsxMmYQqQZ1r9MCV0P"
-QUEUE_NAME = "attendance_queue"
+# RABBITMQ_HOST = "porpoise.rmq.cloudamqp.com"
+# RABBITMQ_PORT = 5671  # TLS port
+# RABBITMQ_USER = "vdejelkw"
+# RABBITMQ_PASSWORD = "9b1hkSWYIGOydNJsxMmYQqQZ1r9MCV0P"
+# QUEUE_NAME = "attendance_queue"
+
+os.getcwd()
+
+RABBITMQ_CONFIG = cr.load_rabbitmq_config('/home/aungmoewai/amw/project/odoo/odoo18/custom_addon/rabbitmq_attendance_sync/rabbitmq_credential.env')
+
+RABBITMQ_HOST = RABBITMQ_CONFIG['host']
+RABBITMQ_PORT = RABBITMQ_CONFIG['port']
+RABBITMQ_USER = RABBITMQ_CONFIG['user']
+RABBITMQ_PASSWORD = RABBITMQ_CONFIG['password']
+QUEUE_NAME = RABBITMQ_CONFIG['queue']
+
 
 
 def start_rabbitmq_consumer():

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_rabbitmq_consumer_control_view" model="ir.actions.act_window">
+        <field name="name">Rabbit MQ Consumer</field>
+        <field name="res_model">rabbitmq.consumer.controller</field>
+        <!--        <field name="search_view_id" ref="healthcare.view_healthcare_labs_search"/>-->
+        <field name="view_mode">kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a rabbit mq consumer
+            </p>
+        </field>
+    </record>
+    <record id="view_rabbitmq_consumer_control_kanban" model="ir.ui.view">
+        <field name="name">rabbitmq.consumer.control.kanban</field>
+        <field name="model">rabbitmq.consumer.controller</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="name"/>
+                <field name="queue"/>
+                <field name="exchange"/>
+                <field name="exchange_type"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card shadow rounded bg-white p-3">
+                            <div class="ribbon ribbon-top-right">
+                                <span t-if="record.state.raw_value == 'running'" class="bg-success text-white">
+                                    Running
+                                </span>
+                                <span t-if="record.state.raw_value == 'stop'" class="bg-danger text-white">
+                                    Stopped
+                                </span>
+                                <span t-if="record.state.raw_value == 'draft'" class="bg-secondary text-white">
+                                    Draft
+                                </span>
+                            </div>
+                            <div class="mb-2">
+                                <h4 class="mb-1 text-primary">
+                                    <t t-esc="record.name.value"/>
+                                </h4>
+                                <small class="text-muted">Queue:
+                                    <t t-esc="record.queue.value"/>
+                                </small>
+                            </div>
+                            <div class="border-top pt-2">
+                                <p>
+                                    <strong>Exchange:</strong>
+                                    <t t-esc="record.exchange.value"/>
+                                </p>
+                                <p>
+                                    <strong>Type:</strong>
+                                    <t t-esc="record.exchange_type.value"/>
+                                </p>
+                            </div>
+                            <div class="mt-3 d-flex justify-content-between">
+                                <button name="action_start_consumer" type="object"
+                                        class="btn btn-outline-success btn-sm"
+                                        t-if="record.state.raw_value != 'running'">
+                                    <i class="fa fa-play mr-1"/>
+                                    Start
+                                </button>
+                                <button name="action_stop_consumer" type="object"
+                                        class="btn btn-outline-danger btn-sm"
+                                        t-if="record.state.raw_value == 'running'">
+                                    <i class="fa fa-stop mr-1"/>
+                                    Stop
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!--    <record id="view_rabbitmq_control_list" model="ir.ui.view">-->
+    <!--        <field name="name">rabbitmq.control.list</field>-->
+    <!--        <field name="model">rabbitmq.control</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <list string="Labs" sample="1">-->
+    <!--                <field name="name" optional="show"/>-->
+    <!--                <field name="queue" optional="show"/>-->
+    <!--                <field name="exchange" optional="show"/>-->
+    <!--                <field name="exchange_type" optional="show"/>-->
+    <!--                <field name="state" optional="show" widget="badge" decoration-success="state == 'running'" decoration-info="state == 'draft'" decoration-danger="state == 'stop'"/>-->
+    <!--            </list>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="view_rabbitmq_cosumer_control_form" model="ir.ui.view">
+        <field name="name">rabbitmq.consumer.control.form</field>
+        <field name="model">rabbitmq.consumer.controller</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_consumer" type="object"
+                            string="Start Consumer"
+                            invisible="state == 'running'"/>
+                    <button name="action_stop_consumer" type="object"
+                            string="Stop Consumer"
+                            invisible="state != 'running'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="queue"/>
+
+                        </group>
+                        <group>
+                            <field name="exchange"/>
+                            <field name="exchange_type"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <data>
+        <menuitem
+                id="rabbitmq_attendence_sync_menu_root"
+                name="Rabbit MQ"
+                sequence="50"
+                web_icon="rabbitmq_attendance_sync,static/description/icon.png"
+        >
+            <menuitem id="rabbitmq_attendance_sync_menu_item_dashboard"
+                      action="rabbitmq_attendance_sync.action_rabbitmq_consumer_control_view"
+                      name="Dashboard" sequence="0"/>
+        </menuitem>
+    </data>
+</odoo>

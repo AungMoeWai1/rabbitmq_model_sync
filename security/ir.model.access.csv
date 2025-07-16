@@ -1,1 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rabbitmq_consumer_control,rabbitmq.consumer.control user,model_rabbitmq_consumer_controller,base.group_user,1,1,1,1
+access_attendance_sync_log,attendance.sync.log user,model_attendance_sync_log,base.group_user,1,1,1,1

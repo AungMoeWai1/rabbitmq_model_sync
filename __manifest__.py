@@ -8,6 +8,15 @@
     'website': "https://www.smeintellect.com",
     'depends': ['base', 'hr', 'hr_attendance', ],
     'data': [
+        #Sequence
+        "data/ir_sequence.xml",
+
+        #view
+        "views/rabbitmq_consumer_control_view.xml",
+        "views/attendance_sync_log_view.xml",
+
+        #security
+        "security/ir.model.access.csv"
 
     ],
     'external_dependencies': {
@@ -15,8 +24,8 @@
     },
     'installable': True,
     'auto_install': False,
-    'application': False,
+    'application': True,
     'license': 'LGPL-3',
-    'post_init_hook': 'post_init_hook',
-    'uninstall_hook': 'uninstall_hook',
+    # 'post_init_hook': 'post_init_hook',
+    # 'uninstall_hook': 'uninstall_hook',
 }

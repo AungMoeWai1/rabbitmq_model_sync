@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="seq_rabbitmq_consumer" model="ir.sequence">
+        <field name="name">RabbitMQ Consumer</field>
+        <field name="code">rabbitmq.control.code</field>
+        <field name="prefix">R</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="True"/>
+    </record>
+</odoo>
