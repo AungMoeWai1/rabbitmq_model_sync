@@ -1,6 +1,8 @@
 """This file is part of the RabbitMQ Attendance Sync module for Odoo."""
-from odoo import fields, models # pylint: disable=import-error
+from odoo import api,fields, models # pylint: disable=import-error
 from odoo.exceptions import UserError # pylint: disable=import-error
+from datetime import timedelta
+
 
 ATTENDANCE_STATUS = [
     ("new", "New"),
@@ -67,3 +69,13 @@ class AttendanceSyncLog(models.Model): # pylint: disable=too-few-public-methods
         except (ValueError, KeyError, UserError) as e:
             self.state = "fail"
             print("Error at check out :", e)
+
+    @api.model
+    def cron_clean_successful_logs(self):
+        """Cron job: Delete successful sync logs older than 2 days."""
+        two_days_ago = fields.Datetime.now() - timedelta(days=2)
+        logs_to_delete = self.env['attendance.sync.log'].search([
+            ('state', '=', 'success'),
+            ('date', '<=', two_days_ago),
+        ])
+        logs_to_delete.unlink()

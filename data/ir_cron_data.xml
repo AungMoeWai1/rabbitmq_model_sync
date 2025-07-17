@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_clean_successful_attendance_logs" model="ir.cron">
+        <field name="name">Clean Successful Attendance Sync Logs</field>
+        <field name="model_id" ref="model_attendance_sync_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_clean_successful_logs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+    </data>
+</odoo>

@@ -11,6 +11,9 @@
         #Sequence
         "data/ir_sequence.xml",
 
+        #Cron service remove mechanism after two day
+        "data/ir_cron_data.xml",
+
         #view
         "views/rabbitmq_consumer_control_view.xml",
         "views/attendance_sync_log_view.xml",
