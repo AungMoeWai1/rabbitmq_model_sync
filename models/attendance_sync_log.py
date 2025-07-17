@@ -1,3 +1,4 @@
+from email.policy import default
 
 from odoo import fields, models
 
@@ -23,7 +24,9 @@ class AttendanceSyncLog(models.Model):
     data = fields.Json(
         string="Data",
         help="JSON data received from RabbitMQ")
+    date=fields.Datetime(string="Date",default=fields.Datetime.now())
     state=fields.Selection(ATTENDANCE_STATUS,string="Attendance status",default='new',)
+
 
     def action_retry_sync(self):
         """Retry the sync operation for this log entry."""
@@ -36,7 +39,7 @@ class AttendanceSyncLog(models.Model):
         try:
             self.env['hr.attendance'].create({
                 'employee_id': self.employee_id.id,
-                'check_in': fields.Datetime.now()
+                'check_in': self.date
             })
             self.state = "success"
         except Exception as e:
@@ -50,7 +53,7 @@ class AttendanceSyncLog(models.Model):
             ('check_out', '=', False)
             ], limit=1)
             if attendance:
-                attendance.write({'check_out': fields.Datetime.now()})
+                attendance.write({'check_out': self.date})
                 self.state = "success"
         except Exception as e:
             self.state = "fail"

@@ -19,6 +19,7 @@
         <field name="arch" type="xml">
             <list string="Attendance Sync Logs" sample="1">
                 <field name="employee_id" optional="show"/>
+                <field name="date" optional="show"/>
                 <field name="attendance_id" optional="show"/>
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
@@ -42,6 +43,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="date"/>
                             <field name="employee_id"/>
                             <field name="attendance_id"/>
                         </group>
