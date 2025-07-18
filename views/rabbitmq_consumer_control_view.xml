@@ -135,6 +135,7 @@
                     <group>
                         <group>
                             <field name="queue"/>
+                            <field name="sync_model"  options="{'no_create': True, 'no_open': True}"/>
 
                         </group>
                         <group>

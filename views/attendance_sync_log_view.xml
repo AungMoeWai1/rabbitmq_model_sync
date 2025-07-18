@@ -48,9 +48,8 @@
         <field name="model">attendance.sync.log</field>
         <field name="arch" type="xml">
             <list string="Attendance Sync Logs" sample="1">
-                <field name="employee_id" optional="show"/>
-                <field name="date" optional="show"/>
-                <field name="attendance_id" optional="show"/>
+                <field name="record_id" optional="show"/>
+                <!-- <field name="attendance_id" optional="show"/> -->
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
                 <field name="type" optional="show"/>
@@ -66,16 +65,18 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button string="Retry" name="action_retry_sync" invisible="state == 'success'" type="object"
+                    <button string="Check In" name="action_create" invisible="state == 'success'" type="object"
+                            class="oe_highlight"/>
+                    <button string="Check Out" name="action_write" invisible="state != 'success'" type="object"
                             class="oe_highlight"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
                         <group>
-                            <field name="date"/>
-                            <field name="employee_id"/>
-                            <field name="attendance_id"/>
+                            <field name="record_id"/>
+                            <field name="model_name" invisible="1"/>
+                            <field name="operation"/>
                         </group>
                         <group>
                             <field name="type"/>

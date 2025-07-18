@@ -6,7 +6,7 @@
     'description': 'Real-time attendance syncing via RabbitMQ',
     'author': 'SME intellect',
     'website': "https://www.smeintellect.com",
-    'depends': ['base', 'hr', 'hr_attendance', ],
+    'depends': ['base', 'hr', 'hr_attendance'],
     'data': [
         #Sequence
         "data/ir_sequence.xml",
@@ -23,7 +23,7 @@
 
     ],
     'external_dependencies': {
-        'python': ['pika']
+        'python': ['pika', 'pydantic', 'python-dotenv']
     },
     'installable': True,
     'auto_install': False,
