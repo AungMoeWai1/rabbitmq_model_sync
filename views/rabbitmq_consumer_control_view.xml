@@ -32,7 +32,7 @@
     <record id="action_rabbitmq_consumer_control_view" model="ir.actions.act_window">
         <field name="name">Rabbit MQ Consumer</field>
         <field name="res_model">rabbitmq.consumer.controller</field>
-        <field name="search_view_id" ref="rabbitmq_attendance_sync.view_rabbitmq_consumer_controller_search"/>
+        <field name="search_view_id" ref="rabbitmq_model_sync.view_rabbitmq_consumer_controller_search"/>
         <field name="view_mode">kanban,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -154,10 +154,10 @@
                 id="rabbitmq_attendence_sync_menu_root"
                 name="Rabbit MQ"
                 sequence="50"
-                web_icon="rabbitmq_attendance_sync,static/description/icon.png"
+                web_icon="rabbitmq_model_sync,static/description/icon.png"
         >
             <menuitem id="rabbitmq_attendance_sync_menu_item_dashboard"
-                      action="rabbitmq_attendance_sync.action_rabbitmq_consumer_control_view"
+                      action="rabbitmq_model_sync.action_rabbitmq_consumer_control_view"
                       name="Dashboard" sequence="0"/>
         </menuitem>
     </data>
