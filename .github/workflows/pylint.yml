@@ -1,0 +1,13 @@
+name: Use Shared Lint Workflow (Python Only)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    uses: waiyankyawsdk/ci-templates/.github/workflows/lint.yml@main
+    with:
+      run_pylint: true
+      run_eslint: false

@@ -1,11 +1,9 @@
-from enum import IntEnum
-
+# *- coding: utf-8 -*-
 from typing import Optional
-from .enum_ext import EnumExt
-
-from datetime import datetime
 
 from pydantic import BaseModel
+
+from .enum_ext import EnumExt
 
 
 class RecordStatus(EnumExt):
@@ -42,5 +40,3 @@ class RabbitMQConsumerState(EnumExt):
     DRAFT = ('draft', 'Draft')
     STOP = ('stop', 'Stop')
     RUNNING = ('running', 'Running')
-
-

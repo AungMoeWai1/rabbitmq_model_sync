@@ -16,7 +16,7 @@
 
         #view
         "views/rabbitmq_consumer_control_view.xml",
-        "views/attendance_sync_log_view.xml",
+        "views/rabbitmq_log_view.xml",
 
         #security
         "security/ir.model.access.csv"
@@ -29,6 +29,6 @@
     'auto_install': False,
     'application': True,
     'license': 'LGPL-3',
-    # 'post_init_hook': 'post_init_hook',
-    # 'uninstall_hook': 'uninstall_hook',
+    'uninstall_hook': 'uninstall_hook',
+    'post_load': 'post_load_hook',
 }

@@ -2,7 +2,7 @@
 # pylint: disable = R0903
 
 from enum import Enum
-from typing import List, Generator
+from typing import Generator, List
 
 x_sel = lambda x : (x.value[0],x.value[1])
 class EnumExt(Enum):

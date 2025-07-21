@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="view_attendance_sync_log_search" model="ir.ui.view">
-        <field name="name">attendance_sync_log.search</field>
-        <field name="model">attendance.sync.log</field>
+    <record id="view_rabbitmq_log_search" model="ir.ui.view">
+        <field name="name">rabbitmq_log.search</field>
+        <field name="model">rabbitmq.log</field>
         <field name="arch" type="xml">
             <search string="Search Attendance Log">
-                <field name="employee_id"/>
+                <field name="record_id"/>
                 <field name="queue_name"/>
                 <field name="data"/>
                 <separator/>
-                <filter name="type" string="Check In" domain="[('type', '=', 'check_in')]"/>
-                <filter name="type" string="Check Out" domain="[('type', '=', 'check_out')]"/>
+                <!-- <filter name="type" string="Check In" domain="[('type', '=', 'check_in')]"/>
+                <filter name="type" string="Check Out" domain="[('type', '=', 'check_out')]"/> -->
                 <separator/>
                 <filter name="state" string="New State" domain="[('state', '=', 'new')]"/>
                 <filter name="state" string="Fail State" domain="[('state', '=', 'fail')]"/>
                 <filter name="state" string="Success State" domain="[('state', '=', 'success')]"/>
 
                 <separator/>
-                <filter string="Date" name="date" date="date"/>
+                <!-- <filter string="Date" name="date" date="date"/> -->
                 <separator/>
 
                 <group expand="0" string="Group By">
-                    <filter string="Attendance Type" name="type" domain="[]" context="{'group_by': 'type'}"/>
+                    <filter string="Operation Type" name="operation" domain="[]" context="{'group_by': 'operation'}"/>
                     <filter string="State" name="state" domain="[]" context="{'group_by': 'state'}"/>
                     <separator/>
-                    <filter string="Date" name="date" domain="[]" context="{'group_by':'date'}"/>
+                    <!-- <filter string="Date" name="date" domain="[]" context="{'group_by':'date'}"/> -->
                 </group>
             </search>
         </field>
     </record>
 
-    <record id="action_attendance_sync_log_view" model="ir.actions.act_window">
+    <record id="action_rabbitmq_log_view" model="ir.actions.act_window">
         <field name="name">Attendance Records</field>
-        <field name="res_model">attendance.sync.log</field>
-        <field name="search_view_id" ref="rabbitmq_attendance_sync.view_attendance_sync_log_search"/>
+        <field name="res_model">rabbitmq.log</field>
+        <field name="search_view_id" ref="rabbitmq_attendance_sync.view_rabbitmq_log_search"/>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -43,32 +43,32 @@
     </record>
 
 
-    <record id="view_attendance_sync_log_list" model="ir.ui.view">
-        <field name="name">attendance.sync.log.list</field>
-        <field name="model">attendance.sync.log</field>
+    <record id="view_rabbitmq_log_list" model="ir.ui.view">
+        <field name="name">rabbitmq.log.list</field>
+        <field name="model">rabbitmq.log</field>
         <field name="arch" type="xml">
             <list string="Attendance Sync Logs" sample="1">
                 <field name="record_id" optional="show"/>
                 <!-- <field name="attendance_id" optional="show"/> -->
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
-                <field name="type" optional="show"/>
+                <!-- <field name="type" optional="show"/> -->
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'success'"
                        decoration-info="state == 'new'" decoration-danger="state == 'fail'"/>
             </list>
         </field>
     </record>
 
-    <record id="view_attendance_sync_log_form" model="ir.ui.view">
-        <field name="name">attendance.sync.log.form</field>
-        <field name="model">attendance.sync.log</field>
+    <record id="view_rabbitmq_log_form" model="ir.ui.view">
+        <field name="name">rabbitmq.log.form</field>
+        <field name="model">rabbitmq.log</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button string="Check In" name="action_create" invisible="state == 'success'" type="object"
+                    <!-- <button string="Check In" name="action_create" invisible="state == 'success'" type="object"
                             class="oe_highlight"/>
                     <button string="Check Out" name="action_write" invisible="state != 'success'" type="object"
-                            class="oe_highlight"/>
+                            class="oe_highlight"/> -->
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -79,7 +79,7 @@
                             <field name="operation"/>
                         </group>
                         <group>
-                            <field name="type"/>
+                            <!-- <field name="type"/> -->
                             <field name="queue_name" readonly="True"/>
                             <field name="data"/>
                         </group>
@@ -92,7 +92,7 @@
     <data>
 
         <menuitem id="rabbitmq_attendance_sync_menu_item"
-                  action="rabbitmq_attendance_sync.action_attendance_sync_log_view"
+                  action="rabbitmq_attendance_sync.action_rabbitmq_log_view"
                   parent="rabbitmq_attendance_sync.rabbitmq_attendence_sync_menu_root"
                   name="Attendance Records" sequence="10"/>
     </data>
