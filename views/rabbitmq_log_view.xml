@@ -19,14 +19,12 @@
                 <filter name="state" string="Success State" domain="[('state', '=', 'success')]"/>
 
                 <separator/>
-                <!-- <filter string="Date" name="date" date="date"/> -->
-                <separator/>
 
                 <group expand="0" string="Group By">
                     <filter string="Operation Type" name="operation" domain="[]" context="{'group_by': 'operation'}"/>
                     <filter string="State" name="state" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Model" name="model_name" domain="[]" context="{'group_by': 'model_name'}"/>
                     <separator/>
-                    <!-- <filter string="Date" name="date" domain="[]" context="{'group_by':'date'}"/> -->
                 </group>
             </search>
         </field>
@@ -51,7 +49,7 @@
         <field name="arch" type="xml">
             <list string="Attendance Sync Logs" sample="1">
                 <field name="record_id" optional="show"/>
-                <!-- <field name="attendance_id" optional="show"/> -->
+                <field name="model_name" optional="show"/>
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
                  <field name="operation" optional="show"/>
@@ -74,14 +72,14 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="record_id"/>
-                            <field name="model_name" invisible="1"/>
-                            <field name="operation"/>
+                            <field name="record_id" readonly="state=='success'"/>
+                            <field name="model_name" readonly="state=='success'"/>
+                            <field name="operation" readonly="state=='success'"/>
                         </group>
                         <group>
-                             <field name="operation"/>
                             <field name="queue_name" readonly="True"/>
-                            <field name="data"/>
+                            <field name="data_pretty" widget="text" readonly="1"/>
+                            <field name="error" readonly="state=='success'"/>
                         </group>
                     </group>
                 </sheet>

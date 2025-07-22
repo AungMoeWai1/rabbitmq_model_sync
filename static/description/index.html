@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>RabbitMQ Attendance Sync</title>
+    <title>RabbitMQ Model Sync</title>
 
     <!-- Essential Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -40,10 +40,10 @@
         box-shadow: 0px 12px 30px rgba(127, 84, 179, 0.15);
     " class="mt-4">
         <h1 style="font-size: 48px; font-weight: 800; color: #222;">
-            RabbitMQ Attendance Sync
+            RabbitMQ Model Sync
         </h1>
         <p style="font-size: 18px; font-weight: 500; color: #555;" class="mb-5">
-            Seamlessly sync attendance data with RabbitMQ for real-time updates and efficient management.
+            Seamlessly sync Model data with RabbitMQ for real-time updates and efficient management.
         </p>
 
         <div class="d-flex flex-column flex-lg-row justify-content-center align-items-center mt-5"
@@ -116,8 +116,10 @@
                         </div>
                         <p class="m-0"
                            style="text-align: left;font-size: 16px; font-weight: 400; color:var(--text-color-light);">
-                            Developed a model for managing RabbitMQ consumers directly from the Odoo backend. Supports
-                            start/stop actions and state tracking (draft, running, stop).
+                            Developed a model for managing RabbitMQ consumers directly from the Odoo backend. Each
+                            consumer can be linked to a specific Odoo model to determine where received data should be
+                            processed and stored. Supports start/stop actions and state tracking (draft, running,
+                            stopped).
                         </p>
                     </div>
                 </div>
@@ -252,14 +254,14 @@
                                 <div class="col-md-12">
                                     <h1 style="font-weight:bold; font-size:calc(1.1rem + 1vw); line-height:120%; text-align:center; text-transform:capitalize; font-size: 40px;
                                         font-weight: 700;">
-                                        <span style="color:#121212; font-size:calc(1.1rem + 1vw)">Attendance Records & Retrying</span>
+                                        <span style="color:#121212; font-size:calc(1.1rem + 1vw)">Message Logs & Retry Management</span>
                                     </h1>
                                 </div>
                                 <div class="col-md-12">
                                     <p
                                             style="font-weight:400; font-size:16px; line-height:150%; color:var(--text-color-light);text-align:left;">
-                                        Monitor and manage attendance records with ease. The dashboard provides insights
-                                        into attendance patterns and allows for quick retries of failed messages.
+                                        The dashboard allows administrators to monitor attendance records, analyze
+                                        trends, and retry failed messages easily, ensuring data accuracy and control.
                                     </p>
                                 </div>
                                 <div class="col-md-12 text-center mb-3">
@@ -284,6 +286,28 @@
                                         <img alt="" class="img-fluid" loading="lazy"
                                              src="./assets/screenshoots/retry_mechanism.png"
                                              style="min-height: 1px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <p
+                                            style="font-weight:400; font-size:16px; line-height:150%; color:var(--text-color-light);text-align:left;">
+                                        Now you can verify that the selected model correctly stores the received data
+                                        from incoming messages.
+                                    </p>
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <div class="d-flex align-items-stretch shadow-sm p-3 rounded w-100"
+                                         style="background-color: #fff;">
+                                        <div style="width: 6px; background-color: #ff0000; border-radius: 6px;"></div>
+                                        <div class="ms-3 flex-grow-1">
+                                            <p class="mb-0">
+                                                This is a consumer worker only.
+                                                To send messages, you need to build a producer using any third-party app
+                                                and host RabbitMQ on any server.
+                                                Use the hosted server’s credentials in the .env file to connect it with
+                                                Odoo.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 

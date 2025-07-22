@@ -3,6 +3,7 @@ import json
 import logging
 import threading
 
+from pkg_resources import require
 from psycopg2 import DatabaseError
 
 from odoo import SUPERUSER_ID, _, api, fields, models, modules
@@ -23,7 +24,7 @@ class RabbitMqConsumerController(models.Model):
     _description = "RabbitMQ Consumer Controller"
 
     name = fields.Char(string="Name", default=lambda self: _("New"))
-    queue = fields.Char(string="Queue Name")
+    queue = fields.Char(string="Queue Name",required=True)
     exchange_type = fields.Selection(
         selection=ExchangeType.get_selection(), string="Exchange Type", default="direct"
     )
@@ -35,6 +36,7 @@ class RabbitMqConsumerController(models.Model):
         "ir.model",
         string="Sync Model",
         help="Select the model to sync with RabbitMQ messages.",
+        required=True,
         ondelete="SET NULL",
     )
 

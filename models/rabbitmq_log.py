@@ -2,8 +2,9 @@
 from datetime import datetime, timezone
 
 import pytz
+import json
 from dateutil import parser
-from odoo import fields, models
+from odoo import api,fields, models
 
 from ..dataclasses.datamodels import OperationType, RecordStatus
 
@@ -29,7 +30,7 @@ def convert_to_odoo_datetime(input_datetime):
     Convert various datetime formats (ISO 8601, string, datetime) into UTC datetime without tzinfo,
     which is the format Odoo expects.
     """
-    if isinstance(input_datetime, str):
+    if isinstance(input_datetime,str):
         try:
             dt = parser.isoparse(input_datetime)
         except Exception:
@@ -52,6 +53,7 @@ class RabibitLog(models.Model):
 
     queue_name = fields.Char(string="Queue Name")
     data = fields.Json(string="Data", help="Message received from RabbitMQ")
+    data_pretty = fields.Text(string="Data", compute='_compute_data_pretty')
     state = fields.Selection(
         selection=RecordStatus.get_selection(), string="Status", default="new"
     )
@@ -89,25 +91,35 @@ class RabibitLog(models.Model):
         }
 
     def _execute_operation(self, operation, vals):
-        """Handle create/write operation generically."""
+        """Handle create/write operation generically, catch errors."""
         vals = self._prepare_vals(vals)
         record_id = vals.pop("record_id", None)
 
-        # if operation == "create":
-        #     rec = self.env[self.model_name].create(vals)
-        #     self.record_id = rec.id
-        #     self.state = "success"
-        #     return rec
-
-        if record_id:
-            record = self.env[self.model_name].browse(record_id)
-            if record.exists() and record.write(vals):
-                self.record_id = record.id
+        try:
+            if operation == "create":
+                rec = self.env[self.model_name].create(vals)
+                self.record_id = rec.id
                 self.state = "success"
-                return True
+                self.error = False  # Clear previous error
+                return rec
 
-        self.state = "fail"
-        return False
+            if record_id:
+                record = self.env[self.model_name].browse(record_id)
+                if record.exists():
+                    record.write(vals)
+                    self.record_id = record.id
+                    self.state = "success"
+                    self.error = False
+                    return True
+
+            self.state = "fail"
+            self.error = "Record not found for update."
+            return False
+
+        except Exception as e:
+            self.state = "fail"
+            self.error = f"Sync Error: {str(e)}"
+            return False
 
     def process_odoo_operation(self):
         """Process attendance operation based on log record's operation type."""
@@ -115,3 +127,11 @@ class RabibitLog(models.Model):
             return self._execute_operation(self.operation, self.data)
         self.state = "fail"
         return False
+
+    @api.depends('data')
+    def _compute_data_pretty(self):
+        for record in self:
+            try:
+                record.data_pretty = json.dumps(record.data or {}, indent=4)
+            except Exception:
+                record.data_pretty = str(record.data)

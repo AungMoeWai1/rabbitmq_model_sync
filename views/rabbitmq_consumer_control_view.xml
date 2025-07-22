@@ -17,7 +17,6 @@
                 <filter name="state" string="Draft" domain="[('state', '=', 'draft')]"/>
                 <filter name="state" string="Stop" domain="[('state', '=', 'stop')]"/>
                 <filter name="state" string="Running" domain="[('state', '=', 'running')]"/>
-
                 <separator/>
 
                 <group expand="0" string="Group By">
