@@ -36,8 +36,8 @@ def convert_to_odoo_datetime(input_datetime):
         try:
             dt = parser.isoparse(input_datetime)
         except Exception as e:# pylint: disable=broad-except
-            dt = parser.parse(input_datetime)
             print(e)
+            dt = parser.parse(input_datetime)
     elif isinstance(input_datetime, datetime):
         dt = input_datetime
     else:
