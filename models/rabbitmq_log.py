@@ -1,6 +1,8 @@
 # -*- utf-8 -*-
 from datetime import datetime, timezone
 
+import pytz
+from dateutil import parser
 from odoo import fields, models
 
 from ..dataclasses.datamodels import OperationType, RecordStatus
@@ -14,11 +16,36 @@ def firebase_iso_to_odoo_datetime(iso_str):
     # Convert to Odoo string format
     return fields.Datetime.to_string(dt)
 
+
 def firebase_timestamp_to_odoo_datetime(seconds, nanoseconds=0):
     """Convert Firebase timestamp to Odoo datetime string."""
     dt = datetime.fromtimestamp(seconds + nanoseconds / 1e9, tz=timezone.utc)
     # Convert to Odoo-compatible UTC string
     return fields.Datetime.to_string(dt)
+
+
+def convert_to_odoo_datetime(input_datetime):
+    """
+    Convert various datetime formats (ISO 8601, string, datetime) into UTC datetime without tzinfo,
+    which is the format Odoo expects.
+    """
+    if isinstance(input_datetime, str):
+        try:
+            dt = parser.isoparse(input_datetime)
+        except Exception:
+            dt = parser.parse(input_datetime)
+    elif isinstance(input_datetime, datetime):
+        dt = input_datetime
+    else:
+        raise ValueError("Unsupported datetime format")
+
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=pytz.UTC)
+    else:
+        dt = dt.astimezone(pytz.UTC)
+
+    return dt.replace(tzinfo=None)
+
 
 class RabibitLog(models.Model):
     _name = "rabbitmq.log"
@@ -57,7 +84,7 @@ class RabibitLog(models.Model):
     def _prepare_vals(self, vals):
         """Convert datetime for check_in/check_out if present."""
         return {
-            k: firebase_iso_to_odoo_datetime(v) if k in date_list else v
+            k: convert_to_odoo_datetime(v) if k in date_list else v
             for k, v in vals.items()
         }
 
