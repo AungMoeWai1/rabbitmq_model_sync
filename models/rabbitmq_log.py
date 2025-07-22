@@ -41,6 +41,7 @@ class RabibitLog(models.Model):
         string="Record ID",
         help="Reference to the record in the model",
     )
+    error=fields.Char(string="Error")
 
     def prepare_log_vals(self, msg):
         """Prepare log values from message dict."""
@@ -65,11 +66,11 @@ class RabibitLog(models.Model):
         vals = self._prepare_vals(vals)
         record_id = vals.pop("record_id", None)
 
-        if operation == "create":
-            rec = self.env[self.model_name].create(vals)
-            self.record_id = rec.id
-            self.state = "success"
-            return rec
+        # if operation == "create":
+        #     rec = self.env[self.model_name].create(vals)
+        #     self.record_id = rec.id
+        #     self.state = "success"
+        #     return rec
 
         if record_id:
             record = self.env[self.model_name].browse(record_id)

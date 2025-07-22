@@ -8,9 +8,11 @@
                 <field name="record_id"/>
                 <field name="queue_name"/>
                 <field name="data"/>
+                <field name="error"/>
+                <field name="operation"/>
                 <separator/>
-                <!-- <filter name="type" string="Check In" domain="[('type', '=', 'check_in')]"/>
-                <filter name="type" string="Check Out" domain="[('type', '=', 'check_out')]"/> -->
+                <filter name="operation" string="Check In" domain="[('operation', '=', 'create')]"/>
+                <filter name="operation" string="Check Out" domain="[('operation', '=', 'write')]"/>
                 <separator/>
                 <filter name="state" string="New State" domain="[('state', '=', 'new')]"/>
                 <filter name="state" string="Fail State" domain="[('state', '=', 'fail')]"/>
@@ -52,7 +54,7 @@
                 <!-- <field name="attendance_id" optional="show"/> -->
                 <field name="queue_name" optional="show"/>
                 <field name="data" optional="show"/>
-                <!-- <field name="type" optional="show"/> -->
+                 <field name="operation" optional="show"/>
                 <field name="state" optional="show" widget="badge" decoration-success="state == 'success'"
                        decoration-info="state == 'new'" decoration-danger="state == 'fail'"/>
             </list>
@@ -65,10 +67,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <!-- <button string="Check In" name="action_create" invisible="state == 'success'" type="object"
+                    <button string="Retry" name="process_odoo_operation" invisible="state == 'success'" type="object"
                             class="oe_highlight"/>
-                    <button string="Check Out" name="action_write" invisible="state != 'success'" type="object"
-                            class="oe_highlight"/> -->
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -79,7 +79,7 @@
                             <field name="operation"/>
                         </group>
                         <group>
-                            <!-- <field name="type"/> -->
+                             <field name="operation"/>
                             <field name="queue_name" readonly="True"/>
                             <field name="data"/>
                         </group>
