@@ -1,3 +1,4 @@
+""""Asyncio Consumer for RabbitMQ"""
 import asyncio
 import logging
 import os
@@ -38,6 +39,7 @@ LOGGER = logging.getLogger(__name__)
 
 # pylint: disable=too-many-instance-attributes,too-many-arguments
 class AsyncAttendanceConsumer:
+    """Asyncio Consumer for RabbitMQ"""
     RABBITMQ_CONFIG = get_rabbitmq_config()
     EXCHANGE = ""
     EXCHANGE_TYPE = ExchangeType.direct
@@ -169,6 +171,7 @@ class AsyncAttendanceConsumer:
 
 
 class ReconnectingAsyncAttendanceConsumer:
+    """Reconnecting Asyncio Consumer for RabbitMQ"""
     def __init__(self, exchange_name, exchange_type, queue_name, message_callback=None):
         self._reconnect_delay = 0
         self._consumer = AsyncAttendanceConsumer(
@@ -208,9 +211,9 @@ class ReconnectingAsyncAttendanceConsumer:
             LOGGER.info("Reconnecting after %d seconds", reconnect_delay)
             time.sleep(reconnect_delay)
             self._consumer = AsyncAttendanceConsumer(
-                exchange_name=self._consumer._exchange_name,
-                exchange_type=self._consumer._exchange_type,
-                queue_name=self._consumer._queue,
+                exchange_name=self._consumer._exchange_name, # pylint: disable=protected-access
+                exchange_type=self._consumer._exchange_type, # pylint: disable=protected-access
+                queue_name=self._consumer._queue, # pylint: disable=protected-access
                 message_callback=self._consumer.message_callback,
             )
 

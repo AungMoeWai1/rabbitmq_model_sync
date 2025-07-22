@@ -1,10 +1,12 @@
-# -*- utf-8 -*-
+"""RabbitMQ Log Model for Odoo
+This model handles RabbitMQ log messages, processes them, and manages the state of operations.
+It includes methods for converting datetime formats, preparing log values, and executing operations.
+"""
 from datetime import datetime, timezone
 
 import pytz
-import json
 from dateutil import parser
-from odoo import api,fields, models
+from odoo import fields, models #pylint: disable=import-error
 
 from ..dataclasses.datamodels import OperationType, RecordStatus
 
@@ -33,7 +35,7 @@ def convert_to_odoo_datetime(input_datetime):
     if isinstance(input_datetime,str):
         try:
             dt = parser.isoparse(input_datetime)
-        except Exception:
+        except Exception:# pylint: disable=broad-except
             dt = parser.parse(input_datetime)
     elif isinstance(input_datetime, datetime):
         dt = input_datetime
@@ -49,11 +51,12 @@ def convert_to_odoo_datetime(input_datetime):
 
 
 class RabibitLog(models.Model):
+    """RabbitMQ Log Model for Odoo."""
     _name = "rabbitmq.log"
+    _description="Rabbit mq received log messages."
 
     queue_name = fields.Char(string="Queue Name")
     data = fields.Json(string="Data", help="Message received from RabbitMQ")
-    data_pretty = fields.Text(string="Data", compute='_compute_data_pretty')
     state = fields.Selection(
         selection=RecordStatus.get_selection(), string="Status", default="new"
     )
@@ -116,7 +119,7 @@ class RabibitLog(models.Model):
             self.error = "Record not found for update."
             return False
 
-        except Exception as e:
+        except Exception as e:# pylint: disable=broad-except
             self.state = "fail"
             self.error = f"Sync Error: {str(e)}"
             return False
@@ -127,11 +130,3 @@ class RabibitLog(models.Model):
             return self._execute_operation(self.operation, self.data)
         self.state = "fail"
         return False
-
-    @api.depends('data')
-    def _compute_data_pretty(self):
-        for record in self:
-            try:
-                record.data_pretty = json.dumps(record.data or {}, indent=4)
-            except Exception:
-                record.data_pretty = str(record.data)

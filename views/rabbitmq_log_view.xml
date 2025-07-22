@@ -78,7 +78,7 @@
                         </group>
                         <group>
                             <field name="queue_name" readonly="True"/>
-                            <field name="data_pretty" widget="text" readonly="1"/>
+                            <field name="data" widget="jsonb" readonly="1"/>
                             <field name="error" readonly="state=='success'"/>
                         </group>
                     </group>

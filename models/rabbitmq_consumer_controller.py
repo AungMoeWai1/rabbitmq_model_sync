@@ -1,12 +1,11 @@
-#-*- coding: utf-8 -*-
+"""Manages RabbitMQ consumers, processes messages, and syncs data to Odoo models."""
 import json
 import logging
 import threading
 
-from pkg_resources import require
 from psycopg2 import DatabaseError
 
-from odoo import SUPERUSER_ID, _, api, fields, models, modules
+from odoo import SUPERUSER_ID, _, api, fields, models, modules #pylint: disable=import-error
 
 from ..dataclasses.datamodels import (ExchangeType, LogValues,
                                       RabbitMQConsumerState)
@@ -18,6 +17,7 @@ _logger = logging.getLogger(__name__)
 RMQ_LOG = "rabbitmq.log"
 
 class RabbitMqConsumerController(models.Model):
+    """Controller for managing RabbitMQ consumers in Odoo."""
     CONSUMERS = {}
     THREADS = {}
     _name = "rabbitmq.consumer.controller"

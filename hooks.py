@@ -5,6 +5,8 @@ import odoo
 def post_load_hook():
     """ Get the database name from config"""
     db_name = odoo.tools.config.get('db_name')
+    if not db_name:
+        return
     registry = modules.registry.Registry.new(db_name)
     with registry.cursor() as cr:
         env = api.Environment(cr, SUPERUSER_ID, {})
