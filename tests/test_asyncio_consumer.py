@@ -1,8 +1,12 @@
+# pylint: disable=protected-access,line-too-long,import-error
 """Test cases for the AsyncAttendanceConsumer and ReconnectingAsyncAttendanceConsumer classes."""
 import unittest
 from unittest.mock import MagicMock, patch
 
-from odoo.addons.rabbitmq_model_sync.utils.asyncio_consumer import (AsyncAttendanceConsumer, ReconnectingAsyncAttendanceConsumer) # pylint: disable=line-too-long,import-error
+from odoo.addons.rabbitmq_model_sync.utils.asyncio_consumer import (
+    AsyncAttendanceConsumer,
+    ReconnectingAsyncAttendanceConsumer,
+)
 
 
 class TestAsyncAttendanceConsumer(unittest.TestCase):
@@ -96,11 +100,11 @@ class TestReconnectingAsyncConsumer(unittest.TestCase):
         reconnecting_consumer = ReconnectingAsyncAttendanceConsumer(
             self.exchange_name, self.exchange_type, self.queue_name, self.callback
         )
-        reconnecting_consumer._consumer.should_reconnect = True # pylint: disable=protected-access
-        reconnecting_consumer._consumer.was_consuming = False # pylint: disable=protected-access
-        reconnecting_consumer._running = False # pylint: disable=protected-access
+        reconnecting_consumer._consumer.should_reconnect = True
+        reconnecting_consumer._consumer.was_consuming = False
+        reconnecting_consumer._running = False
 
-        reconnecting_consumer._maybe_reconnect() # pylint: disable=protected-access
+        reconnecting_consumer._maybe_reconnect()
         mock_stop.assert_called_once()
 
     def test_reconnect_delay(self):
@@ -108,8 +112,8 @@ class TestReconnectingAsyncConsumer(unittest.TestCase):
         consumer = ReconnectingAsyncAttendanceConsumer(
             self.exchange_name, self.exchange_type, self.queue_name, self.callback
         )
-        self.assertEqual(consumer._get_reconnect_delay(), 1) # pylint: disable=protected-access
-        self.assertEqual(consumer._get_reconnect_delay(), 2) # pylint: disable=protected-access
+        self.assertEqual(consumer._get_reconnect_delay(), 1)
+        self.assertEqual(consumer._get_reconnect_delay(), 2)
 
-        consumer._consumer.was_consuming = True # pylint: disable=protected-access
-        self.assertEqual(consumer._get_reconnect_delay(), 0) # pylint: disable=protected-access
+        consumer._consumer.was_consuming = True
+        self.assertEqual(consumer._get_reconnect_delay(), 0)

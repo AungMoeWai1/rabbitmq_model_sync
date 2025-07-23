@@ -1,10 +1,11 @@
+# pylint: disable=import-error,protected-access
 """Test cases for the rabbitmq.log model in Odoo."""
 
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
-from odoo import fields # pylint: disable=import-error
-from odoo.tests.common import TransactionCase # pylint: disable=import-error
+from odoo import fields
+from odoo.tests.common import TransactionCase
 from ..models.rabbitmq_log import convert_to_odoo_datetime
 
 
@@ -12,7 +13,7 @@ class TestRabibitLog(TransactionCase):
     """Tests for rabbitmq.log model."""
 
     @classmethod
-    def setUpClass(cls): # pylint: disable=invalid-name
+    def setUpClass(cls):  # pylint: disable=invalid-name
         """Set up the test environment."""
         super().setUpClass()
         cls.log_model = cls.env["rabbitmq.log"]
@@ -50,7 +51,7 @@ class TestRabibitLog(TransactionCase):
             "check_out": "2025-07-23T10:00:00+00:00",
             "name": "Test",
         }
-        converted = log._prepare_vals(vals) # pylint: disable=protected-access
+        converted = log._prepare_vals(vals)
         self.assertIsInstance(converted["check_in"], datetime)
         self.assertIsInstance(converted["check_out"], datetime)
         self.assertEqual(converted["name"], "Test")
@@ -65,7 +66,7 @@ class TestRabibitLog(TransactionCase):
             }
         )
         # Create operation should create a new partner
-        partner = log._execute_operation("create", log.data) # pylint: disable=protected-access
+        partner = log._execute_operation("create", log.data)
         self.assertTrue(partner.exists())
         self.assertEqual(partner.name, "Test Partner")
         self.assertEqual(log.state, "success")
@@ -74,7 +75,7 @@ class TestRabibitLog(TransactionCase):
         # Now test write operation updates record
         log.operation = "write"
         log.data = {"record_id": partner.id, "name": "Updated Partner"}
-        result = log._execute_operation("write", log.data) # pylint: disable=protected-access
+        result = log._execute_operation("write", log.data)
         self.assertTrue(result)
         updated_partner = self.env["res.partner"].browse(partner.id)
         self.assertEqual(updated_partner.name, "Updated Partner")
@@ -82,7 +83,7 @@ class TestRabibitLog(TransactionCase):
 
         # Write with invalid record_id sets fail state
         log.data = {"record_id": 9999999, "name": "No One"}
-        result = log._execute_operation("write", log.data) # pylint: disable=protected-access
+        result = log._execute_operation("write", log.data)
         self.assertFalse(result)
         self.assertEqual(log.state, "fail")
         self.assertIn("Record not found", log.error)
@@ -102,7 +103,7 @@ class TestRabibitLog(TransactionCase):
             "odoo.addons.base.models.res_partner.Partner.create",
             side_effect=Exception("Boom"),
         ):
-            result = log._execute_operation("create", log.data) # pylint: disable=protected-access
+            result = log._execute_operation("create", log.data)
             self.assertFalse(result)
             self.assertEqual(log.state, "fail")
             self.assertIn("Sync Error", log.error)
@@ -124,7 +125,7 @@ class TestRabibitLog(TransactionCase):
         invalid_log = self.log_model.new(
             {
                 "model_name": "res.partner",
-                "operation": "invalid_op",  # Bypass selection field restriction
+                "operation": "invalid_op",
                 "data": {},
             }
         )
