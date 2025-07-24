@@ -1,4 +1,4 @@
-# pylint: disable=import-error,protected-access
+# pylint: disable=import-error,protected-access,relative-beyond-top-level
 """Test cases for the rabbitmq.log model in Odoo."""
 
 from datetime import datetime, timedelta

@@ -1,3 +1,4 @@
+#pylint:disable=import-error
 """Manages RabbitMQ consumers, processes messages, and syncs data to Odoo models."""
 import json
 import logging
@@ -5,7 +6,7 @@ import threading
 
 from psycopg2 import DatabaseError
 
-from odoo import SUPERUSER_ID, _, api, fields, models, modules #pylint: disable=import-error
+from odoo import SUPERUSER_ID, _, api, fields, models, modules
 
 from ..dataclasses.datamodels import (ExchangeType, LogValues,
                                       RabbitMQConsumerState)

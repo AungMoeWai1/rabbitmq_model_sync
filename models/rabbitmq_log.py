@@ -1,3 +1,4 @@
+#pylint:disable=import-error
 """RabbitMQ Log Model for Odoo
 This model handles RabbitMQ log messages, processes them, and manages the state of operations.
 It includes methods for converting datetime formats, preparing log values, and executing operations.
@@ -6,7 +7,7 @@ from datetime import datetime, timezone
 
 import pytz
 from dateutil import parser
-from odoo import fields, models #pylint: disable=import-error
+from odoo import fields, models
 
 from ..dataclasses.datamodels import OperationType, RecordStatus
 

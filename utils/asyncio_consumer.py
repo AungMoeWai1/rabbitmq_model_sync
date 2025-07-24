@@ -1,3 +1,4 @@
+#pylint:disable=import-error
 """"Asyncio Consumer for RabbitMQ"""
 import asyncio
 import logging
